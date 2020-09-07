@@ -1,0 +1,8 @@
+# ENV
+.env
+
+# Node modules
+node_modules
+
+# Locks
+*lock.*
