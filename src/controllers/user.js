@@ -1,3 +1,5 @@
+const bcrypt = require('bcryptjs');
+
 const User = require('../models/User');
 
 module.exports = {
@@ -9,9 +11,21 @@ module.exports = {
             name, et, password
         });
 
-        newUser.save();
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(newUser.password, salt, (err, hash) => {
+                if (err) throw err;
 
-        return res.json(newUser);
+                newUser.password = hash;
+                newUser.save()
+                    .then(user => {
+                        return res.json({
+                            user
+                        });
+                   }).catch(err => {
+                        return res.json({ msg: err });
+                   });
+            });
+        });
     }
 
 }

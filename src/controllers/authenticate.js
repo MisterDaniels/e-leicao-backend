@@ -1,28 +1,33 @@
+const passport = require('passport');
+
 module.exports = {
 
-    async login(req, res) {
+    async login(req, res, next) {
         passport.authenticate('local', (err, user, info) => {
             if (err) { 
-                res.json({
+                res.status(400).json({
                     msg: err
                 });
             }
 
             if (!user) {
-                return res.json(403, {
-                    msg: 'Not authenticated'
+                return res.status(403).json({
+                    msg: 'No user found'
                 });
             }
 
             req.logIn(user, (err) => {
-                return res.json(200, {
-                    msg: 'Authenticated'
+                if (err) {
+                    return res.status(400).json({ 
+                        msg: err 
+                    });
+                }
+
+                return res.status(200).json({
+                    msg: `Logged in ${ user.id }`
                 });
-            })(req, res, next)
-        });
-        return res.json({
-            msg: 'Hello World'
-        });
+            });
+        })(req, res, next);
     }
 
 }

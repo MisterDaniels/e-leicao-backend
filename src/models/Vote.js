@@ -1,17 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const UserModel = new Schema({
-    name: {
-        type: String,
-        required: true
-    },
+const VoteModel = new Schema({
     et: {
         type: String,
         required: true,
         unique: true
     },
-    password: {
+    candidate_id: {
         type: String,
         required: true
     }
@@ -23,4 +19,4 @@ const UserModel = new Schema({
     } 
 });
 
-module.exports = User = mongoose.model('users', UserModel);
+module.exports = Vote = mongoose.model('votes', VoteModel);
