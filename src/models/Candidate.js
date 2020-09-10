@@ -7,7 +7,12 @@ const CandidateModel = new Schema({
         required: true,
         unique: true
     },
-    type: {
+    number: {
+        type: Number,
+        required: true,
+        unique: true
+    },
+    acronym: {
         type: String,
         required: true
     }
