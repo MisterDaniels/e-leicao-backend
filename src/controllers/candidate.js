@@ -7,7 +7,8 @@ module.exports = {
     },
 
     async get(req, res) {
-        const user = req.user;
+        const user = req;
+        console.log(req.user);
     }
 
 }

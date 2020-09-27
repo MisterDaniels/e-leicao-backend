@@ -1,12 +1,14 @@
 var express = require('express');
 var router = express.Router();
 const { celebrate, Joi, Segments } = require('celebrate');
+const jwt = require('jsonwebtoken');
 
 const IndexController = require('./controllers/index');
 const AuthenticateController = require('./controllers/authenticate');
 const UserController = require('./controllers/user');
 const VoteController = require('./controllers/vote');
 const CandidateController = require('./controllers/candidate');
+const passport = require('passport');
 
 router.get('/', IndexController.get);
 
@@ -14,19 +16,18 @@ router.post('/api/user/create', celebrate({
     [Segments.BODY]: Joi.object().keys({
         name: Joi.string().required(),
         et: Joi.string().length(12).required(),
-        password: Joi.string().required(),
-        cep: Joi.string().length(8).required()
+        password: Joi.string().required()
     })
 }), UserController.create);
 
-router.post('/api/auth', celebrate({
-    [Segments.BODY]: Joi.object().keys({
+router.get('/api/auth', celebrate({
+    [Segments.QUERY]: Joi.object().keys({
         et: Joi.string().length(12).required(),
         password: Joi.string().required()
     })
 }), AuthenticateController.login);
 
-router.post('/api/vote', loggedIn, celebrate({
+router.post('/api/vote', passport.authenticate('jwt', { session: false }), celebrate({
     [Segments.BODY]: Joi.object().keys({
         candidate_id: Joi.string().required()
     })
@@ -40,16 +41,6 @@ router.post('/api/candidate/create', celebrate({
     })
 }), CandidateController.create);
 
-router.get('/api/candidate', loggedIn, CandidateController.get);
-
-function loggedIn(req, res, next) {
-    if (req.user) {
-        next();
-    } else {
-        res.status(403).json({
-            msg: 'Not logged in'
-        });
-    }
-}
+router.get('/api/candidate', passport.authenticate('jwt', { session: false }), CandidateController.get);
 
 module.exports = router;

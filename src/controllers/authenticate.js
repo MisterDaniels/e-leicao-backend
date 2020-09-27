@@ -1,9 +1,10 @@
 const passport = require('passport');
+const jwt = require('jsonwebtoken');
 
 module.exports = {
 
     async login(req, res, next) {
-        passport.authenticate('local', (err, user, info) => {
+        passport.authenticate('login', (err, user, info) => {
             if (err) { 
                 res.status(400).json({
                     msg: err
@@ -23,9 +24,9 @@ module.exports = {
                     });
                 }
 
-                return res.status(200).json({
-                    msg: `Logged in ${ user.id }`
-                });
+                const token = jwt.sign({ user: user }, 'TOP_SECRET');
+
+                return res.status(200).json({ token });
             });
         })(req, res, next);
     }
