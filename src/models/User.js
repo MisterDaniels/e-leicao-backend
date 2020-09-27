@@ -14,6 +14,10 @@ const UserModel = new Schema({
     password: {
         type: String,
         required: true
+    },
+    cep: {
+        type: String,
+        required: true
     }
 }, { 
     strict: false,

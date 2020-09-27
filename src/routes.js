@@ -29,15 +29,15 @@ router.get('/api/auth', celebrate({
 
 router.post('/api/vote', passport.authenticate('jwt', { session: false }), celebrate({
     [Segments.BODY]: Joi.object().keys({
-        candidate_id: Joi.string().required()
+        candidate_id: Joi.string().alphanum().length(24).required()
     })
 }), VoteController.transact);
 
 router.post('/api/candidate/create', celebrate({
     [Segments.BODY]: Joi.object().keys({
         name: Joi.string().required(),
-        role: Joi.string().required(),
-        cep: Joi.string().length(8).required()
+        number: Joi.number().integer().positive().required(),
+        acronym: Joi.string().required()
     })
 }), CandidateController.create);
 
