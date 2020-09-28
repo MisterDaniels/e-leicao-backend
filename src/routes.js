@@ -28,7 +28,7 @@ router.get('/api/auth', celebrate({
 }), AuthenticateController.login);
 
 router.post('/api/vote', passport.authenticate('jwt', { session: false }), celebrate({
-    [Segments.BODY]: Joi.object().keys({
+    [Segments.QUERY]: Joi.object().keys({
         candidate_id: Joi.string().alphanum().length(24).required()
     })
 }), VoteController.transact);
@@ -37,7 +37,8 @@ router.post('/api/candidate/create', celebrate({
     [Segments.BODY]: Joi.object().keys({
         name: Joi.string().required(),
         number: Joi.number().integer().positive().required(),
-        acronym: Joi.string().required()
+        acronym: Joi.string().required(),
+        avatar: Joi.string().uri().required()
     })
 }), CandidateController.create);
 
