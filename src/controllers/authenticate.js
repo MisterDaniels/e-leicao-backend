@@ -1,5 +1,6 @@
 const passport = require('passport');
 const jwt = require('jsonwebtoken');
+const Vote = require('../models/Vote');
 
 module.exports = {
 
@@ -26,7 +27,11 @@ module.exports = {
 
                 const token = jwt.sign({ user: user }, 'TOP_SECRET');
 
-                return res.status(200).json({ token });
+                Vote.find({ et: user.et }).then(() => {
+                    return res.status(200).json({ token, has_voted: true });
+                }).catch(() => {
+                    return res.status(200).json({ token });
+                });
             });
         })(req, res, next);
     }

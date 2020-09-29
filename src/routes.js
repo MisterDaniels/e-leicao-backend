@@ -29,7 +29,8 @@ router.get('/api/auth', celebrate({
 
 router.post('/api/vote', passport.authenticate('jwt', { session: false }), celebrate({
     [Segments.QUERY]: Joi.object().keys({
-        candidate_id: Joi.string().alphanum().length(24).required()
+        candidate_id: Joi.string().alphanum().length(24).required(),
+        secret_token: Joi.string().optional()
     })
 }), VoteController.transact);
 
