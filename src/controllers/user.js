@@ -5,10 +5,10 @@ const User = require('../models/User');
 module.exports = {
 
     async create(req, res) {
-        const { name, et, password, cep } = req.body;
+        const { name, et, password } = req.body;
 
         const newUser = new User({
-            name, et, password, cep
+            name, et, password
         });
 
         bcrypt.genSalt(10, (err, salt) => {

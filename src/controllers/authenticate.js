@@ -27,9 +27,15 @@ module.exports = {
 
                 const token = jwt.sign({ user: user }, 'TOP_SECRET');
 
-                Vote.find({ et: user.et }).then(() => {
+                Vote.find({ et: user.et }).then((user) => {
+                    console.log(user);
+
+                    if (user.length === 0) {
+                        return res.status(200).json({ token });
+                    }
+
                     return res.status(200).json({ token, has_voted: true });
-                }).catch(() => {
+                }).catch((err) => {
                     return res.status(200).json({ token });
                 });
             });
